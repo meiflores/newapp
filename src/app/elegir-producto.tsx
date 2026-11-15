@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { FlatList, Keyboard, Pressable, Text, TextInput, View } from 'react-native';
 
 import { Body, Button, Loading, ProductImage } from '@/components/ui';
 import { Radius, Spacing } from '@/constants/theme';
@@ -29,6 +29,14 @@ export default function ElegirProductoScreen() {
     return () => clearTimeout(t);
   }, [q, searching]);
 
+  // es una ventana modal: se cierra con dismiss (back puede no encontrar a dónde volver)
+  const close = () => {
+    Keyboard.dismiss();
+    if (router.canDismiss()) router.dismiss();
+    else if (router.canGoBack()) router.back();
+    else router.replace('/');
+  };
+
   const pick = (id: string) => router.replace({ pathname: '/resena/[productId]', params: { productId: id } });
   const suggest = () => router.replace({ pathname: '/sugerir-producto', params: { nombre: q } });
 
@@ -37,7 +45,7 @@ export default function ElegirProductoScreen() {
       <View style={{ padding: Spacing.three, gap: Spacing.three }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text style={{ fontSize: 20, fontWeight: '700', color: theme.text }}>¿Qué querés reseñar?</Text>
-          <Pressable onPress={() => router.back()} hitSlop={10} accessibilityRole="button">
+          <Pressable onPress={close} hitSlop={16} style={{ paddingVertical: 6, paddingLeft: 12 }} accessibilityRole="button">
             <Text style={{ fontSize: 16, color: theme.primary, fontWeight: '600' }}>Cancelar</Text>
           </Pressable>
         </View>
