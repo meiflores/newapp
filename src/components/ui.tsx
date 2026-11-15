@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import type { ReactNode } from 'react';
 import {
   ActivityIndicator,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -27,6 +28,21 @@ export function Screen({
 }) {
   const theme = useTheme();
   const inner = <View style={styles.inner}>{children}</View>;
+
+  // En iOS la barra de título es translúcida y el contenido pasa por debajo:
+  // el ScrollView calcula solo el espacio de la barra, del notch y de las tabs.
+  if (scroll && Platform.OS === 'ios') {
+    return (
+      <ScrollView
+        style={{ flex: 1, backgroundColor: theme.background }}
+        contentContainerStyle={styles.scroll}
+        contentInsetAdjustmentBehavior="automatic"
+        keyboardShouldPersistTaps="handled">
+        {inner}
+      </ScrollView>
+    );
+  }
+
   return (
     <SafeAreaView edges={edges} style={{ flex: 1, backgroundColor: theme.background }}>
       {scroll ? (
