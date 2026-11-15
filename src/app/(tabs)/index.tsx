@@ -4,6 +4,7 @@ import { FlatList, RefreshControl, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ProductTile } from '@/components/product-card';
+import { QuickReviewCard } from '@/components/quick-review-card';
 import { Body, Empty, Loading, SectionTitle, Title } from '@/components/ui';
 import { BottomTabInset, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -49,6 +50,8 @@ export default function HomeScreen() {
           <Title>Hola{profile?.display_name ? `, ${profile.display_name}` : ''} ✨</Title>
           <Body muted>¿Qué querés probar hoy?</Body>
         </View>
+
+        <QuickReviewCard />
 
         <Carousel title="Últimos lanzamientos" items={launches} />
         <Carousel title="Lo más reseñado" items={popular} />
