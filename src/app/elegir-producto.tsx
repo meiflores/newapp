@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Pressable, TextInput, View } from 'react-native';
+import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
 
 import { Body, Button, Loading, ProductImage } from '@/components/ui';
 import { Radius, Spacing } from '@/constants/theme';
@@ -34,7 +34,13 @@ export default function ElegirProductoScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <View style={{ padding: Spacing.three }}>
+      <View style={{ padding: Spacing.three, gap: Spacing.three }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 20, fontWeight: '700', color: theme.text }}>¿Qué querés reseñar?</Text>
+          <Pressable onPress={() => router.back()} hitSlop={10} accessibilityRole="button">
+            <Text style={{ fontSize: 16, color: theme.primary, fontWeight: '600' }}>Cancelar</Text>
+          </Pressable>
+        </View>
         <TextInput
           autoFocus
           value={query}

@@ -44,7 +44,7 @@ function RootStack() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="producto/[id]" options={{ title: '' }} />
         <Stack.Screen name="resena/[productId]" options={{ title: 'Escribir reseña', presentation: 'modal' }} />
-        <Stack.Screen name="elegir-producto" options={{ title: '¿Qué querés reseñar?', presentation: 'modal' }} />
+        <Stack.Screen name="elegir-producto" options={{ headerShown: false, presentation: 'modal' }} />
         <Stack.Screen name="sugerir-producto" options={{ title: 'Sugerir producto', presentation: 'modal' }} />
       </Stack.Protected>
 
