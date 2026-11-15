@@ -23,7 +23,7 @@ La base ya tiene lugar para lo que viene: listas (rutina, terminados), seguir ge
 ### 1. Supabase
 
 1. Creá un proyecto gratis en [supabase.com](https://supabase.com).
-2. En **SQL Editor**, pegá y corré `supabase/migrations/0001_init.sql`. Después corré `supabase/seed.sql` (categorías y unos productos de prueba).
+2. En **SQL Editor**, corré en orden los archivos de `supabase/migrations/` y después `supabase/seed.sql` (categorías y unos productos de prueba). *(Ya está hecho en el proyecto `fana`.)*
 3. Para probar más rápido: en **Authentication > Sign In / Providers > Email**, desactivá **Confirm email**. (Volver a activarlo antes de publicar.)
 4. En **Project Settings > API Keys** copiá la URL del proyecto y la *publishable key*.
 
