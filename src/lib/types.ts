@@ -62,4 +62,5 @@ export type FeedReview = {
   is_verified: boolean;
   verified_kind: VerifiedKind | null;
   helpful_count: number;
+  photo_paths: string[];
 };

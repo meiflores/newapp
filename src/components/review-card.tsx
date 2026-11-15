@@ -1,9 +1,13 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image } from 'expo-image';
+import { useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Avatar, Stars, VerifiedBadge } from '@/components/ui';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { disclosureBadge, skinLabel, VERIFIED_LABEL } from '@/lib/beauty';
+import { publicUrl } from '@/lib/supabase';
 import type { FeedReview } from '@/lib/types';
 
 export function ReviewCard({
@@ -53,6 +57,8 @@ export function ReviewCard({
       {review.title ? <Text style={[styles.title, { color: theme.text }]}>{review.title}</Text> : null}
       <Text style={[styles.body, { color: theme.text }]}>{review.body}</Text>
 
+      {review.photo_paths?.length ? <ReviewPhotos paths={review.photo_paths} /> : null}
+
       <View style={styles.footer}>
         <Text style={[styles.meta, { color: theme.textSecondary }]}>
           {new Date(review.created_at).toLocaleDateString('es-AR')}
@@ -66,6 +72,30 @@ export function ReviewCard({
         )}
       </View>
     </View>
+  );
+}
+
+function ReviewPhotos({ paths }: { paths: string[] }) {
+  const [open, setOpen] = useState<string | null>(null);
+  const urls = paths.map((p) => publicUrl('review-photos', p));
+  return (
+    <>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: Spacing.two }}>
+        {urls.map((url) => (
+          <Pressable key={url} onPress={() => setOpen(url)} accessibilityLabel="Ver foto">
+            <Image source={{ uri: url }} style={styles.photo} contentFit="cover" />
+          </Pressable>
+        ))}
+      </ScrollView>
+      <Modal visible={!!open} transparent animationType="fade" onRequestClose={() => setOpen(null)}>
+        <Pressable style={styles.viewer} onPress={() => setOpen(null)} accessibilityLabel="Cerrar foto">
+          <SafeAreaView style={{ flex: 1, width: '100%' }}>
+            <Text style={styles.close}>Cerrar ✕</Text>
+            {open ? <Image source={{ uri: open }} style={{ flex: 1 }} contentFit="contain" /> : null}
+          </SafeAreaView>
+        </Pressable>
+      </Modal>
+    </>
   );
 }
 
@@ -91,4 +121,7 @@ const styles = StyleSheet.create({
   body: { fontSize: 15, lineHeight: 22 },
   footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   tag: { borderRadius: Radius.full, paddingHorizontal: 10, paddingVertical: 3 },
+  photo: { width: 110, height: 110, borderRadius: Radius.medium },
+  viewer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.92)' },
+  close: { color: '#fff', fontSize: 16, fontWeight: '600', alignSelf: 'flex-end', padding: Spacing.three },
 });

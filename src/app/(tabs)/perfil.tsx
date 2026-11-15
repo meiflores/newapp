@@ -8,6 +8,7 @@ import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { concernLabel, skinLabel, undertoneLabel, VERIFIED_LABEL } from '@/lib/beauty';
 import { publicUrl, supabase } from '@/lib/supabase';
+import { extensionFor, uploadImage } from '@/lib/upload';
 import { useAuth } from '@/providers/auth-provider';
 
 type MyReview = {
@@ -48,12 +49,8 @@ export default function PerfilScreen() {
     const asset = picked.assets[0];
     setUploading(true);
     try {
-      const bytes = await fetch(asset.uri).then((r) => r.arrayBuffer());
-      const path = `${session.user.id}/avatar-${Date.now()}.jpg`;
-      const { error } = await supabase.storage
-        .from('avatars')
-        .upload(path, bytes, { contentType: asset.mimeType ?? 'image/jpeg', upsert: true });
-      if (error) throw error;
+      const path = `${session.user.id}/avatar-${Date.now()}.${extensionFor(asset.mimeType)}`;
+      await uploadImage('avatars', path, asset.uri, asset.mimeType);
       await supabase.from('profiles').update({ avatar_url: publicUrl('avatars', path) }).eq('id', session.user.id);
       await refreshProfile();
     } catch {
