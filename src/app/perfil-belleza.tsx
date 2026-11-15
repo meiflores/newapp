@@ -53,8 +53,9 @@ export default function PerfilBellezaScreen() {
       return;
     }
     await refreshProfile();
-    if (editing) router.back();
-    // en el primer ingreso, la navegación pasa sola a la app
+    // editando desde el perfil: vuelve atrás. Primer ingreso: no hay pantalla previa, va al inicio
+    if (router.canGoBack()) router.back();
+    else router.replace('/');
   }
 
   const toggleConcern = (v: string) =>
